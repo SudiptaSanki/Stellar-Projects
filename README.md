@@ -1,6 +1,6 @@
-# Stellar Journey to Mastery - Levels 1 and 2 Guide
+# Stellar Journey to Mastery - Levels 1, 2, and 3 Guide
 
-This repository is a beginner-friendly guide for students starting with Stellar, Freighter, testnet accounts, basic transactions, multi-wallet use, smart contract events, and the first step to writing a contract.
+This repository is a beginner-friendly guide for students starting with Stellar, Freighter, testnet accounts, basic transactions, multi-wallet use, smart contract events, contract compilation, unit testing, and connecting a smart contract to a React frontend (dApp).
 
 ## What students will learn
 
@@ -11,6 +11,8 @@ This repository is a beginner-friendly guide for students starting with Stellar,
 - How to manage multiple wallets
 - How to understand contracts and events
 - How to write and test a first simple contract on Testnet
+- How to compile and write robust unit tests for Soroban contracts
+- How to integrate a Stellar smart contract with a React web interface using Freighter
 
 ## Recommended repository structure
 
@@ -22,9 +24,11 @@ stellar-journey-to-mastery/
 │   ├── level-2-yellow-belt.md
 │   └── screenshots/
 ├── projects/
-│   ├── level-1/
-│   └── level-2/
-├── contracts/
+│   ├── level-3-orange-belt/
+│   │   └── LandRegistry-dApp/
+│   │       ├── LandRegistrySmartContract/  # Rust Soroban Contract
+│   │       └── src/                        # React Frontend
+│   └── ...
 └── assets/
 ```
 
@@ -40,6 +44,10 @@ flowchart TD
     F --> G[Learn contracts and events]
     G --> H[Write a simple contract]
     H --> I[Deploy and test on Testnet]
+    I --> J[Write Contract Unit Tests]
+    J --> K[Build React Front-End dApp]
+    K --> L[Integrate Freighter & SDK]
+    L --> M[Deploy and Run dApp Locally]
 ```
 
 ## Level 1 - White Belt
@@ -177,13 +185,104 @@ flowchart LR
     G --> H[Read result in app or script]
 ```
 
+## Level 3 - Orange Belt
+
+### Goal
+Build a complete mini dApp (Land Registry), write robust unit tests for the contract, deploy the smart contract on Testnet, and integrate it with a React frontend using Freighter.
+
+### Concepts
+- Complete mini dApp workflow
+- Rust & Soroban SDK storage structures
+- Contract Unit Testing (`cargo test` with mocked auth)
+- Contract Deployment via CLI
+- Connecting React frontend to Soroban with `@stellar/stellar-sdk`
+- Freighter signing via custom service layer
+
+### Project Structure (Land Registry dApp)
+The template for this level is located at `projects/level-3-orange-belt/LandRegistry-dApp`.
+It contains:
+1. **`LandRegistrySmartContract`**: The Rust-based Soroban contract.
+   - `lib.rs`: Exposes `register_property` (checks authorization and saves location/area) and `fetch_property` (reads property from contract instance storage).
+   - `test.rs`: Exercises testing the contract locally in a mocked environment.
+2. **React Frontend**:
+   - `src/components/LandRegistryService.js`: Interface that configures the connection to Stellar RPC, prepares the transaction, requests Freighter to sign it, and submits it to the network.
+   - `src/components/RegisterProperty.js` & `FetchProperty.js`: Forms for adding and looking up property registrations on the blockchain.
+
+---
+
+### Step-by-step Guide
+
+#### 1. Compile and Test the Contract
+Before deploying your smart contract, verify that its code compiles and passes all unit tests:
+1. Navigate to the contract folder:
+   ```bash
+   cd "projects/level-3-orange-belt/LandRegistry-dApp/LandRegistrySmartContract/contracts/hello-world"
+   ```
+2. Run the tests using Cargo:
+   ```bash
+   cargo test
+   ```
+   *Note: This will execute the test defined in `src/test.rs` to verify that registering and fetching properties works as expected in a simulated local blockchain environment.*
+
+#### 2. Deploy to Testnet
+1. Compile the contract to WASM:
+   ```bash
+   stellar contract build
+   ```
+   *(Or run `cargo build --target wasm32-unknown-unknown --release` inside the root Cargo directory).*
+2. Deploy the contract:
+   ```bash
+   stellar contract deploy --network testnet --source-account <your-account-alias> --wasm target/wasm32-unknown-unknown/release/hello_world.wasm
+   ```
+3. Copy the outputted **Contract ID** (e.g., `CBK6DMOHM...`).
+
+#### 3. Configure the React App
+1. Open the file `projects/level-3-orange-belt/LandRegistry-dApp/src/components/LandRegistryService.js`.
+2. Locate the `CONTRACT_ADDRESS` constant (line 16).
+3. Replace the placeholder contract ID with your newly deployed **Contract ID**.
+
+#### 4. Run the dApp Locally
+1. Navigate to the React app folder:
+   ```bash
+   cd "projects/level-3-orange-belt/LandRegistry-dApp"
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the dev server:
+   ```bash
+   npm start
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser. Ensure your Freighter wallet is switched to the **Testnet** network and funded via Friendbot before interacting!
+
+---
+
+### Student practice checklist
+- [ ] Compiled the LandRegistry contract using `stellar contract build`
+- [ ] Ran the unit tests using `cargo test` and saw them pass
+- [ ] Deployed the contract WASM to the Stellar Testnet
+- [ ] Configured the React app with the correct deployed contract ID
+- [ ] Connected Freighter wallet to the dApp interface
+- [ ] Successfully registered a land property (signed the transaction via Freighter)
+- [ ] Fetched the registered property details using the resulting ID
+
+### What to submit for Level 3
+- The deployed contract ID on Stellar Testnet.
+- A screenshot showing `cargo test` passing in your terminal.
+- A screenshot of the frontend dApp displaying a successfully fetched property details.
+- A short summary explaining how Soroban instance storage is used to persist data in the `LandRegistry` contract.
+
+---
+
 ## How students should use this repository
 
 1. Read the Level 1 section first.
 2. Complete the checklist before moving to Level 2.
-3. Save every project inside the matching level folder.
-4. Add screenshots and notes to explain what you built.
-5. Keep Mainnet work for later levels.
+3. Advance to Level 3 to learn how to build a full web application on top of your smart contract.
+4. Save every project inside the matching level folder.
+5. Add screenshots and notes to explain what you built.
+6. Keep Mainnet work for later levels.
 
 ## Sources consulted for this guide
 
@@ -193,12 +292,12 @@ flowchart LR
 - Stellar docs: Contract Events
 - Stellar docs: Smart contract support and RPC guidance
 - Stellar docs: Wallet Integration
+- Soroban SDK: Custom storage maps and TTL extension
 
 ## Next phase
 
-Levels 3 to 7 can be added later as separate modules:
-- Orange Belt
-- Green Belt
-- Blue Belt
-- Black Belt
-- Master Belt
+Levels 4 to 7 can be added later as separate modules:
+- Green Belt (Build Production MVP + 10 users)
+- Blue Belt (Scale to 50 Users + user feedback)
+- Black Belt (Mainnet Launch + Audit)
+- Master Belt (Startup track with SCF grants)
