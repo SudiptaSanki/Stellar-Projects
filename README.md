@@ -275,6 +275,13 @@ Before deploying your smart contract, verify that its code compiles and passes a
 
 ---
 
+## 💡 Project Ideas by Level
+
+If you are looking for ideas on what to build for each belt level, we have categorized 27 unique Web3 and Stellar-based projects in our dedicated guide:
+👉 **[Stellar Project Ideas Guide](PROJECT_IDEAS.md)** (includes details for White, Yellow, Orange, Green, Blue, Black, and Master Belts).
+
+---
+
 ## How students should use this repository
 
 1. Read the Level 1 section first.
