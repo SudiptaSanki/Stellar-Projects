@@ -199,7 +199,7 @@ Build a complete mini dApp (Land Registry), write robust unit tests for the cont
 - Freighter signing via custom service layer
 
 ### Project Structure (Land Registry dApp)
-The template for this level is located at `projects/level-3-orange-belt/LandRegistry-dApp`.
+The template for this level is located at `projects/level-3-orange-belt`.
 It contains:
 1. **`LandRegistrySmartContract`**: The Rust-based Soroban contract.
    - `lib.rs`: Exposes `register_property` (checks authorization and saves location/area) and `fetch_property` (reads property from contract instance storage).
@@ -216,7 +216,7 @@ It contains:
 Before deploying your smart contract, verify that its code compiles and passes all unit tests:
 1. Navigate to the contract folder:
    ```bash
-   cd "projects/level-3-orange-belt/LandRegistry-dApp/LandRegistrySmartContract/contracts/hello-world"
+   cd "projects/level-3-orange-belt/LandRegistrySmartContract/contracts/hello-world"
    ```
 2. Run the tests using Cargo:
    ```bash
@@ -234,17 +234,19 @@ Before deploying your smart contract, verify that its code compiles and passes a
    ```bash
    stellar contract deploy --network testnet --source-account <your-account-alias> --wasm target/wasm32-unknown-unknown/release/hello_world.wasm
    ```
-3. Copy the outputted **Contract ID** (e.g., `CBK6DMOHM...`).
+3. Copy the outputted **Contract ID**.
+
+*(For this project, the deployed testnet Contract ID is: `CBK6DMOHM7I7G3IDNQS7JAJOCJ4XVO5SLXP6KHQAWNVTKW5YHETSE5UA`)*
 
 #### 3. Configure the React App
-1. Open the file `projects/level-3-orange-belt/LandRegistry-dApp/src/components/LandRegistryService.js`.
+1. Open the file `projects/level-3-orange-belt/src/components/LandRegistryService.js`.
 2. Locate the `CONTRACT_ADDRESS` constant (line 16).
 3. Replace the placeholder contract ID with your newly deployed **Contract ID**.
 
 #### 4. Run the dApp Locally
 1. Navigate to the React app folder:
    ```bash
-   cd "projects/level-3-orange-belt/LandRegistry-dApp"
+   cd "projects/level-3-orange-belt"
    ```
 2. Install dependencies:
    ```bash
